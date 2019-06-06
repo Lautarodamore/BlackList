@@ -6,5 +6,5 @@ app.get('/', (req, res) => {
 });
 
 app.use(require("./user.routes"));
-
+app.use(require("./list.routes"));
 module.exports = app;

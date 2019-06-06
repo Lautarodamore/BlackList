@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
+
 const User = require("../models/User");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+//Registrarse
 app.post('/signUp', async (req, res) => {
     
     const nuevoUsuario = await new User({username: req.body.username, email: req.body.email, password: req.body.password});
@@ -16,6 +19,7 @@ app.post('/signUp', async (req, res) => {
     });
 });
 
+//Iniciar sesion
 app.post('/signIn', async (req, res) => {
     User.findOne({email: req.body.email}, (err, usuarioDB) => {
         
@@ -38,5 +42,6 @@ app.post('/signIn', async (req, res) => {
     });
     
 });
+
 
 module.exports = app;
