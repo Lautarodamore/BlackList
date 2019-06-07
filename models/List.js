@@ -18,6 +18,11 @@ const listModel = mongoose.Schema({
     default: {
         type: Number,
         required: true
+    },
+    pagado: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 
