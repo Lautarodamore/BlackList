@@ -23,7 +23,7 @@ app.post('/list/new', async (req, res) => {
 
 app.get('/list/all/:id', async (req, res) => {
     let id = req.params.id;
-    List.find({createdBy: id}).populate("createdBy", "username email").exec( (err, listas)=> {
+    List.find({createdBy: id}).populate("userDef", "username email").exec( (err, listas)=> {
         
         if (err) {
             return res.json({message: "Hubo un error"});
