@@ -27,9 +27,9 @@
           <v-card-title style="background: #f5f5f5">
             Carta numero tres
           </v-card-title>
-          <v-card-content>
+          <v-card-text>
              <chartjs-doughnut :labels="labels" :datasets="datasets" :option="option"></chartjs-doughnut>
-          </v-card-content>
+          </v-card-text>
         </v-card>
       </v-flex>
 
@@ -39,9 +39,9 @@
           <v-card-title style="background: #f5f5f5">
             Carta numero cuatro
           </v-card-title>
-          <v-card-content>
+          <v-card-text>
             <chartjs-line :datalabel="mylabel" :labels="mylabels" :data="mydata" :width="mywidth"></chartjs-line>
-          </v-card-content>
+          </v-card-text>
         </v-card>
       </v-flex>
 
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapActions, mapState} from 'vuex';
 
 export default {
   data() {
@@ -72,6 +73,18 @@ export default {
             }
           }
     }
-  }
+  },
+  methods: {
+    ...mapActions(['signOut'])
+  },
+  computed: {
+    ...mapState(['user'])
+  },
+  created() {
+    if (this.user == null) {
+      this.signOut();
+      this.$router.push("/signin");
+    }
+  },
 }
 </script>

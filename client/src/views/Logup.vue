@@ -1,82 +1,97 @@
 <template>
-    <v-layout my-3 text-xs-center wrap justify-center>
-
-      <v-flex xs12 md8>
-        <v-card style="margin-right: 25px;margin-left: 15px;border-color: #ee44aa;border: 1px solid #ee44aa;" >
+<header :style="{ background: 'url(' + image + ')' }">
+    <v-layout my-5 text-xs-center align-center justify-center>
+     
+      <v-flex xs12 md5>
+        <v-card color="#f5f5f5" style="margin-right: 25px;margin-left: 15px;border-color: #ee44aa;border: 1px solid #ee44aa;" :elevation="24">
     
-          <v-card-title style="background: #f5f5f5">
-            Deudores y Deudas
-            <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="fa fa-search" label="Buscar" single-line hide-details></v-text-field>
+          <v-card-title style="background: #f5f5f5; margin-top: 7px;">
+            <div class="avatar" style="text-align: center;  width:100%;">
+		          <span style="color: rgb(238, 68, 170);" class="font-weight-light"><h1 style="font-weight: 100;">REGISTRATE</h1></span> 
+	          </div>
           </v-card-title>
-          
-          <v-data-table style="background: #f5f5f5!important" :headers="headers" :items="list" :search="search">
-            
-            <template style="background: #f5f5f5" v-slot:items="props">
-              <td style="background: #f5f5f5" >{{ props.item._id }}</td>
-              <td style="background: #f5f5f5" class="px-0">{{ props.item.description }}</td>
-              <td style="background: #f5f5f5" class="px-0">{{ props.item.userDef.username }}</td>
-              <td style="background: #f5f5f5" class="px-0">{{ props.item.default }}</td>
-              <td class="px-0" style="background: #f5f5f5">
-          <v-icon small style="color: rgb(238, 68, 170)" class="mr-2" @click="editItem(props.item._id)" >
-            fas fa-pen
-          </v-icon>
-          <v-icon small style="color: rgb(238, 68, 170)">
-            fas fa-trash
-          </v-icon>
-          </td>
-            </template>
 
+          <v-card-text>
+             <v-form ref="form" v-model="valid" lazy-validation>
+               <v-text-field v-model="username" :rules="usernameRules" label="Usuario" required ></v-text-field>
+               <v-text-field v-model="email" :rules="emailRules" label="E-mail" required ></v-text-field>
 
-          </v-data-table>
+               <v-text-field v-model="password" :rules="passwordRules" type="password" label="Contraseña" required></v-text-field>
+
+            </v-form>
+            <v-btn :disabled="!valid" @click="validate">submit</v-btn>
+            <v-btn @click="reset">clear</v-btn>
+          </v-card-text>
         </v-card>
   </v-flex>
 
       
     </v-layout>
+    </header>
 </template>
 
 <script>
-import axios from 'axios';
-  export default {
-    data () {
-      return {
-        list: [],
-        deudores: [],
-        search: '',
-        headers: [
-          { text: 'id', align: 'left', value: '_id' },
-          { text: 'Descripcion', value: 'description', sortable: false },
-          { text: 'Deudor', value: 'userDef', sortable: false },
-          { text: 'Deuda', value: 'default' },
-          {text: 'Acciones'}
-        ], 
-      }
-    },
+export default {
+    data: () => ({
+      image: require('@/assets/header-cover.jpg'),
+      valid: true,
+      username: '',
+      usernameRules: [
+        v => !!v || 'El usuario es requerido',
+        v => (v && v.length <= 15) || 'El usuario debe ser menor a 10 caracteres'
+      ],
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail es requerido',
+        v => /.+@.+/.test(v) || 'E-mail debe ser valido'
+      ],
+      password: '',
+      passwordRules: [
+        v => !!v || 'La contraseña es requerida',
+        v => (v && v.length >= 4) || 'La contraseña debe ser mayor a 4 caracteres'
+      ]
+      
+    }),
     methods: {
-      editItem(_id){
-        console.log(_id);
-        
+      validate () {
+        if (this.$refs.form.validate()) {
+          this.snackbar = true
+        }
+      },
+      reset() {
+        this.$refs.form.reset()
       }
-    },
-    async created() {
-      await axios.get('http://localhost:3000/list/all/5cf5d426bac1932e50292fa6').then(listDatabase => {
-        this.list = listDatabase.data;
-        this.deudores = listDatabase.data.userDef;
-        console.log(listDatabase.data);
-        
-      });
-    },
+    }
   }
 </script>
 
 <style>
-.v-datatable{
-  background: #f5f5f5;
-  
+.avatar {
+	box-sizing: border-box;
+	transform: translatey(0px);
+	animation: float 6s ease-in-out infinite;
+	background-color: #f5f5f5; 
 }
 
-.formulario{
-  margin-right: 5px;margin-left: 4px;border: 1px solid rgb(238, 68, 170); padding-right: 5px;padding-left: 17px;padding-bottom: 46px;
+.avatar img { width: 100%; height: auto; }
+
+@keyframes float {
+	0% {
+		transform: translatey(0px);
+	}
+	50% {
+		transform: translatey(-20px);
+	}
+	100% {
+		transform: translatey(0px);
+	}
 }
+
+header {
+  background-size: cover;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar app>
-      <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon v-if="user != null" @click="drawer = !drawer"></v-toolbar-side-icon>
       <router-link style="text-decoration: none; color: black;" :to="{ path: '/' }">
         <v-toolbar-title class="headline text-uppercase">
         <span>BLACK</span>
@@ -9,17 +9,20 @@
       </v-toolbar-title>      
       </router-link>
       <v-spacer></v-spacer>
-      <v-btn :to="{ path: '/login' }" depressed style="font-size: 17px" ><span class="font-weight-light" style="color: rgb(238, 68, 170);">SIGNIN</span></v-btn>
-      <v-btn depressed style="font-size: 17px" ><span class="font-weight-light" style="color: rgb(238, 68, 170);">SIGNUP</span></v-btn>
+      <v-btn v-if="user == null" :to="{ path: '/signin' }" depressed style="font-size: 17px" ><span class="font-weight-light" style="color: rgb(238, 68, 170);">SIGNIN</span></v-btn>
+      <v-btn v-if="user == null" depressed :to="{ path: '/signup' }" style="font-size: 17px" ><span class="font-weight-light" style="color: rgb(238, 68, 170);">SIGNUP</span></v-btn>
+      <v-btn v-if="user != null" depressed :to="{ path: '/' }" @click="signOut" style="font-size: 17px" ><span class="font-weight-light" style="color: rgb(238, 68, 170);">SIGNOUT</span></v-btn>
     </v-toolbar>
 
      <v-navigation-drawer v-model="drawer" absolute temporary app>
-      <v-list class="pa-1" style="background-color: #29B6F6">
+      <v-list class="pa-1" style="background-color: #C30047">
 
         <v-list-tile avatar tag="div">
 
           <v-list-tile-content>
-            <v-list-tile-title> <h1>BlackList</h1> </v-list-tile-title>
+            <router-link style="text-decoration: none; color: black;" :to="{ path: '/' }">
+            <v-list-tile-title> <h1>BLACKLIST</h1> </v-list-tile-title>
+            </router-link>
           </v-list-tile-content>
 
           <v-list-tile-action>
@@ -33,13 +36,13 @@
       <v-list class="pt-0" dense >
         <v-divider light></v-divider>
 
-        <v-list-tile :to="{ path: '/' }">
+        <v-list-tile :to="{ path: '/dashboard' }">
           <v-list-tile-action>
             <v-icon>fas fa-chart-bar</v-icon>
           </v-list-tile-action>
 
           <v-list-tile-content>
-            <v-list-tile-title>Inicio</v-list-tile-title>
+            <v-list-tile-title>Dashboard</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -75,6 +78,7 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
   name: 'App',
@@ -82,6 +86,12 @@ export default {
     return {
       drawer: false
     }
-  }
+  },
+  computed: {
+    ...mapGetters(['user'])
+  },
+  methods: {
+    ...mapActions(['signOut'])
+  },
 }
 </script>
