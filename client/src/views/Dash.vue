@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapActions, mapState} from 'vuex';
 
 export default {
@@ -80,11 +81,30 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-  created() {
-    if (this.user == null) {
-      this.signOut();
-      this.$router.push("/signin");
+  async created() {
+
+    let itemStorage = {
+      token: localStorage.getItem('token')
     }
+
+    try {
+      let response = await axios.post('http://localhost:3000/middle/verify', itemStorage);
+      console.log(response);
+      
+      if(!response.data.flag){
+        this.signOut();
+        this.$router.push("/signin");
+        localStorage.removeItem('token');
+      }
+
+    } catch (error) {
+      console.log(error);
+            console.log('error bobo');
+            this.signOut();
+            this.$router.push("/signin");
+            localStorage.removeItem('token');
+    }
+
   },
 }
 </script>

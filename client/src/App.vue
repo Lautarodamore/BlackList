@@ -33,7 +33,7 @@
         </v-list-tile>
       </v-list>
 
-      <v-list class="pt-0" dense >
+      <v-list class="pt-0" dense>
         <v-divider light></v-divider>
 
         <v-list-tile :to="{ path: '/dashboard' }">
@@ -66,6 +66,8 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        
+        
       </v-list>
     </v-navigation-drawer>
 
@@ -74,6 +76,30 @@
         <router-view/>
       </v-slide-y-transition>
     </v-content>
+
+    <v-dialog v-model="dialog" max-width="400" persistent>
+      <v-card>
+        <v-toolbar color="#C30047" dark card>
+          <v-toolbar-title>
+            Espere un momento
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-card-text class="subheading">
+          Estamos consultando nuestros registros...
+        </v-card-text>
+        <v-card-text>
+          <v-progress-linear :indeterminate="true" color="#C30047"></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    
+    <v-snackbar :color="colorSnack" v-model="modelSnack">
+       <span v-if="textoSnack"> {{ textoSnack }} </span>
+      <v-btn flat @click="cerrarSnack">
+        Cerrar
+      </v-btn>
+    </v-snackbar>
+
   </v-app>
 </template>
 
@@ -88,10 +114,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'dialog', 'modelSnack', 'colorSnack', 'textoSnack'])
   },
   methods: {
-    ...mapActions(['signOut'])
+    ...mapActions(['signOut', 'handleSnack']),
+    cerrarSnack() {
+      this.handleSnack({modelSnack: false, colorSnack: "", textoSnack: ""})
+    },
+    esAdmin() {
+      if (this.user.usuario == "ADMIN") {
+        return true;
+      }
+      return false;
+    }
   },
+
 }
 </script>

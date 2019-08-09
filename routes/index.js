@@ -8,4 +8,6 @@ app.get('/', (req, res) => {
 app.use(require("./user.routes"));
 app.use(require("./list.routes"));
 app.use(require('./middleware.routes'));
+app.use(require('./group.routes'));
+
 module.exports = app;

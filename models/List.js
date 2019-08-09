@@ -23,7 +23,13 @@ const listModel = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    fecha : 
+    { 
+        type : Date,
+        default: Date.now 
     }
+
 });
 
 module.exports = mongoose.model("List", listModel);

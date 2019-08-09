@@ -1,4 +1,3 @@
-import axios from 'axios';
 <template>
 <header :style="{ background: 'url(' + image + ')' }">
     <v-layout my-5 text-xs-center align-center justify-center>
@@ -30,7 +29,7 @@ import axios from 'axios';
 
 <script>
 import axios from 'axios';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
     data: () => ({
@@ -48,7 +47,7 @@ export default {
       ],
     }),
     methods: {
-      ...mapActions(['signIn', 'signOut']),
+      ...mapActions(['signIn', 'signOut', 'ocupado', 'handleSnack']),
       async validate() {
         if (this.$refs.form.validate()) {
 
@@ -57,20 +56,27 @@ export default {
             let userSignIn = {
               email: this.email,
               password: this.password };
+            
+            this.ocupado(true);
 
             let response = await axios.post('http://localhost:3000/signIn', userSignIn);
 
-              this.signIn(response.data);
+            this.signIn(response.data);
 
-            
-
+            localStorage.setItem('token', response.data.token);
+            this.handleSnack({modelSnack: true, colorSnack: "success", textoSnack: "Bienvenido de vuelta!"});  
           } catch (error) {
             console.log(error);
             console.log('error bobo');
             this.signOut();
             this.$router.push("/signin");
+            localStorage.removeItem('token');
+            this.handleSnack({modelSnack: true, colorSnack: "error", textoSnack: "Hubu un error en la autenticacion"});
           }  
-
+          finally {
+            this.ocupado(false);
+          }
+          
           
         }
       },
@@ -87,6 +93,7 @@ export default {
         this.$router.push("/dashboard");
       }else{
         this.signOut();
+        localStorage.removeItem("token");
         this.$router.push("/signin");
       }
     }

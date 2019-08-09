@@ -13,17 +13,19 @@ app.post('/middle/verify', (req, res) =>{
         let usuario = jwt.verify(token, process.env.FIRMA);
 
         if (usuario) {
-            res.json({usuario});    
+            res.json({
+                usuario,
+                 flag: true });    
         } else{
             res.json({
                 err: "Error de autenticacion",
-                flag: "N"
+                flag: false
             });
         }
 
         } catch (error) {
             res.json({error,
-                flag: "N"});
+                flag: false});
         } 
 });
 

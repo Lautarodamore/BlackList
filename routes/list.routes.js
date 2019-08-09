@@ -23,7 +23,7 @@ app.post('/list/new', async (req, res) => {
 
 app.get('/list/all/:id', async (req, res) => {
     let id = req.params.id;
-    List.find({createdBy: id}).populate("userDef", "username email").exec( (err, listas)=> {
+    List.find({createdBy: id, pagado: false}).populate("userDef", "username email").exec( (err, listas)=> {
         
         if (err) {
             return res.json({message: "Hubo un error"});
@@ -36,10 +36,8 @@ app.get('/list/all/:id', async (req, res) => {
 app.put('/list/update/:id', async (req, res) => {
     
     let id = req.params.id;
-
     
-
-    List.findOneAndUpdate({ _id: id }, req.body, { new: true, runValidators: true }, (err, listaDB) => {
+    List.findOneAndUpdate({ _id: id }, req.body, { new: true, runValidators: true }).populate("userDef", "username email").exec((err, listaDB) => {
         if(err){
             return res.json({ message: "Hubo un error" });
         }
@@ -49,7 +47,7 @@ app.put('/list/update/:id', async (req, res) => {
     });
 
 });
-
+//Poner una fecha
 app.delete('/list/delete/:id', async (req, res) => {
     let id = req.params.id;
 

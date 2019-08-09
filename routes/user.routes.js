@@ -64,5 +64,22 @@ app.post('/users/group', async (req, res) => {
     
 });
 
+//Devolver usuario segun username
+app.post('/users/username', async (req, res) => {
+    User.findOne({username: req.body.username}, (err, usuariosDB) => {
+        
+        if (err) {
+            return res.status(500).json({err});
+        }
+
+        if( !usuariosDB ){
+            return res.status(400).json({err: "Usuario inexistente"});
+        }
+
+        res.json(usuariosDB);    
+    });
+    
+});
+
 
 module.exports = app;
