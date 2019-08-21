@@ -173,7 +173,7 @@ export default {
         
         let responseDeudores = await axios.get(`/list/all/${this.user.usuario._id}`);
         let arrayDeudores = responseDeudores.data;
-
+        console.log(responseDeudores.data);
         arrayDeudores.forEach(deudor => {
           let fechaDeudor = deudor.fecha;
           deudor.fecha = fechaDeudor.slice(0,10);
