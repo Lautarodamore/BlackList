@@ -4,8 +4,8 @@
       <v-flex xs12 md6>
         <v-card style="margin-right: 25px;margin-left: 15px;border-color: #ee44aa;border: 1px solid #ee44aa; margin-bottom: 22px;" >
     
-          <v-card-title style="background: #f5f5f5">
-            Carta numero uno
+          <v-card-title style="background: #f5f5f5; text-align:center;">
+           <span style="color: rgb(238, 68, 170); width:100%;" class="font-weight-light"><h2 style="font-weight: 300; text-align:center;">Top 3 mas deudores</h2></span> 
           </v-card-title>
 
         </v-card>
@@ -14,8 +14,8 @@
       <v-flex xs12 md6>
         <v-card style="margin-right: 25px;margin-left: 15px;border-color: #ee44aa;border: 1px solid #ee44aa; margin-bottom: 22px;" >
     
-          <v-card-title style="background: #f5f5f5">
-            Carta numero dos
+          <v-card-title style="background: #f5f5f5; text-align:center;">
+            <span style="color: rgb(238, 68, 170); width:100%;" class="font-weight-light"><h2 style="font-weight: 300; text-align:center;">Total deudores</h2></span>
           </v-card-title>
           
         </v-card>
@@ -23,12 +23,8 @@
 
       <v-flex xs12 md6>
         <v-card color="#f5f5f5" style="margin-right: 25px;margin-left: 15px;border-color: #ee44aa;border: 1px solid #ee44aa;" >
-    
-          <v-card-title style="background: #f5f5f5">
-            Carta numero tres
-          </v-card-title>
           <v-card-text>
-             <chartjs-doughnut :labels="labels" :datasets="datasets" :option="option"></chartjs-doughnut>
+             <canvas id="myChart" ></canvas>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -36,11 +32,8 @@
       <v-flex xs12 md6>
         <v-card color="#f5f5f5" style="margin-right: 25px;margin-left: 15px;border-color: #ee44aa;border: 1px solid #ee44aa;" >
     
-          <v-card-title style="background: #f5f5f5">
-            Carta numero cuatro
-          </v-card-title>
           <v-card-text>
-            <chartjs-line :datalabel="mylabel" :labels="mylabels" :data="mydata" :width="mywidth"></chartjs-line>
+            <canvas id="myChart2" ></canvas>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -52,27 +45,16 @@
 import axios from 'axios';
 import { mapActions, mapState} from 'vuex';
 
+// Any of the following formats may be used
+
+
 export default {
   data() {
     return {
-      mywidth : 300,
-      mylabel : 'TestDataLabel',
-      mylabels : ['happy', 'myhappy', 'hello'],
-      mydata : [0, 20, 50],
-      labels: ["Apples", "Bananas", "Grapes"],
-      datasets: [
-        {
-          data: [20,30,50],
-          backgroundColor: ["Red", "#ee44aa", "Purple"]
-        }
-      ],
-      option: {
-            title: {
-              display: true,
-              position: "bottom",
-              text: "Fruits"
-            }
-          }
+      nombresTorta: [],
+      deudasTorta: [],
+      nombresBarra: [],
+      deudasBarra: []
     }
   },
   methods: {
@@ -81,30 +63,108 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-  async created() {
-
-    let itemStorage = {
-      token: localStorage.getItem('token')
-    }
-
+  mounted() {
+    
+},
+  async beforeMount() {
     try {
-      let response = await axios.post('http://localhost:3000/middle/verify', itemStorage);
-      console.log(response);
-      
-      if(!response.data.flag){
-        this.signOut();
-        this.$router.push("/signin");
-        localStorage.removeItem('token');
-      }
+      this.ocupado(true);
+      let response = await axios.get(`http://localhost:3000/list/most/${this.user.usuario._id}`);
+      let lista = response.data;
 
+      let response2 = await axios.get(`http://localhost:3000/list/mosted/${this.user.usuario._id}`);
+      let lista2 = response2.data;
+
+      lista.forEach(deudor => {
+        this.nombresTorta.push(deudor.username);
+        this.deudasTorta.push(deudor.deudaFinal);
+      });
+      this.iniciarDatosTorta(this.nombresTorta, this.deudasTorta);
+
+      lista2.forEach(deudor => {
+        this.nombresBarra.push(deudor.username);
+        this.deudasBarra.push(deudor.deudaFinal);
+      });
+
+      this.iniciarDatosBarras(this.nombresBarra, this.deudasBarra);
     } catch (error) {
       console.log(error);
-            console.log('error bobo');
-            this.signOut();
-            this.$router.push("/signin");
-            localStorage.removeItem('token');
     }
-
+    finally{
+      this.ocupado(false);
+    }
+  },
+  destroyed() {
+    this.nombresTorta = [];
+    this.deudasTorta = [];
+  },
+  
+  methods: {
+    ...mapActions(['ocupado']),
+    iniciarDatosBarras(listaNombres, listaDeudas){
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: listaNombres,
+          datasets: [{
+              label: 'Deuda',
+              data: listaDeudas,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+    },
+    iniciarDatosTorta(listaNombres, listaDeudas){
+      var ctx2 = document.getElementById('myChart2');
+      var myChart2 = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+          labels: listaNombres,
+          datasets: [{
+              label: '# of Votes',
+              data: listaDeudas,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 1
+          }]
+      }
+  });
+      
+    }
   },
 }
 </script>

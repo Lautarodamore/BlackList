@@ -10,10 +10,10 @@ const jwt = require("jsonwebtoken");
 //Registrarse
 app.post('/signUp', async (req, res) => {
     
-    const nuevoUsuario = await new User({username: req.body.username, email: req.body.email, password: req.body.password, group: req.body.group, role: req.body.role,});
+    const nuevoUsuario = await new User({username: req.body.username, email: req.body.email, password: req.body.password, group: req.body.group});
     nuevoUsuario.save((err, usuarioDB) => {
         if (err) {
-            return res.json({message: "Este suarrio ya existe"});
+            return res.json({err: err});
         }
 
         res.json(nuevoUsuario);
@@ -79,6 +79,13 @@ app.post('/users/username', async (req, res) => {
         res.json(usuariosDB);    
     });
     
+});
+
+app.get('/users/:id', async (req, res) => {
+    let id = req.params.id;
+
+    let user = await User.findOne({_id: id});
+    res.json(user.username);
 });
 
 

@@ -16,4 +16,38 @@ app.post('/group/new', async (req, res) => {
     })
 });
 
+app.get('/groups/gets', async (req, res) => {
+  Group.find((err, gruposDB) => {
+        
+              if (err) {
+                  return res.status(500).json({err});
+              }
+
+              if( !gruposDB ){
+                  return res.status(400).json({err: "No hay grupos que mostrar..."});
+              }
+
+              res.json(gruposDB);    
+      });
+
+});
+
+app.get('/gruopname/:group', async (req, res) => {
+  let nombreGrupo = req.params.group;
+
+  Group.findOne({name: nombreGrupo}, (err, grupoDB) => {
+      
+      if (err) {
+          return res.status(500).json({err});
+      }
+
+      if( !grupoDB ){
+          return res.status(400).json({err: "Grupo inexistente"});
+      }
+
+      res.json(grupoDB);    
+  });
+  
+});
+
 module.exports = app;
