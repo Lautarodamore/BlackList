@@ -75,7 +75,7 @@ router.beforeEach( async (to, from, next) => {
       token: localStorage.getItem('token')
     }
     try {
-      let response = await axios.post('http://localhost:3000/middle/verify', itemStorage);
+      let response = await axios.post('/middle/verify', itemStorage);
       
       if(response) {
         if(!response.data.flag) {
