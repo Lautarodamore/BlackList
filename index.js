@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const path = require("path");
 
-require("dotenv").config({ path: '.env' });
 
 const mongoose = require("mongoose");
 
@@ -24,11 +23,13 @@ app.use(cors());
 
 app.use(express.static(path.resolve(__dirname + '/dist/')));
 
-app.use(require("./routes/index"));
-
 app.get(/.*/, (req, res) => {
     res.sendFile(path.resolve(__dirname + '/dist/index.html'));
 });
+
+
+app.use(require("./routes/index"));
+
 
 app.use(morgan('dev'));
 
