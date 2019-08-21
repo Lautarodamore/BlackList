@@ -22,7 +22,7 @@ app.post('/list/new', async (req, res) => {
 
 });
 
-app.get('/list/all/:id', async (req, res) => {
+app.post('/list/all/:id', async (req, res) => {
     let id = req.params.id;
     List.find({createdBy: id, pagado: false}).populate("userDef", "username email").exec( (err, listas)=> {
         

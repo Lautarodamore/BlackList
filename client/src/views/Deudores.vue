@@ -133,7 +133,7 @@ export default {
 
         try {
 
-          let responseEditado = await axios.put(`https://blacklist-luxsys.herokuapp.com/list/update/${this.editedItem._id}`, this.editedItem);
+          let responseEditado = await axios.put(`/list/update/${this.editedItem._id}`, this.editedItem);
           Object.assign(this.deudores[this.editIndex], responseEditado.data.list);
           
           this.handleSnack({modelSnack: true, colorSnack: "success", textoSnack: "La deuda se guardo correctamente!"});
@@ -155,7 +155,7 @@ export default {
       },
       async cobrar() {
         try {
-          let responseDelete = await axios.delete(`https://blacklist-luxsys.herokuapp.com/list/delete/${this.deleteId}`);
+          let responseDelete = await axios.delete(`/list/delete/${this.deleteId}`);
           this.deudores.splice(this.deleteIndex, 1);
           this.handleSnack({modelSnack: true, colorSnack: "success", textoSnack: "Deuda cobrada correctamente!"});
         } catch (error) {
@@ -171,7 +171,7 @@ export default {
         this.ocupado(true);
         console.log(this.user);
         
-        let responseDeudores = await axios.get(`https://blacklist-luxsys.herokuapp.com/list/all/${this.user.usuario._id}`);
+        let responseDeudores = await axios.post(`/list/all/${this.user.usuario._id}`);
         let arrayDeudores = responseDeudores.data;
         console.log(responseDeudores.data);
         arrayDeudores.forEach(deudor => {
