@@ -117,7 +117,7 @@ export default {
       }
     },
     async created() {
-      this.cargarTabla();
+      await this.cargarTabla();
     },
     methods: {
       ...mapActions(['ocupado', 'handleSnack']),
@@ -178,9 +178,8 @@ export default {
           let fechaDeudor = deudor.fecha;
           deudor.fecha = fechaDeudor.slice(0,10);
         });
-
+        console.log(arrayDeudores);
         this.deudores = arrayDeudores;
-        console.log(responseDeudores.data);
         this.ocupado(false);
       }
     },

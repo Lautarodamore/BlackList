@@ -71,14 +71,15 @@ export default {
       this.ocupado(true);
       let response = await axios.get(`/list/most/${this.user.usuario._id}`);
       let lista = response.data;
-
+      console.log(lista);
       let response2 = await axios.get(`/list/mosted/${this.user.usuario._id}`);
       let lista2 = response2.data;
-
+      console.log(lista2);
       lista.forEach(deudor => {
         this.nombresTorta.push(deudor.username);
         this.deudasTorta.push(deudor.deudaFinal);
       });
+      console.log(this.deudasTorta);
       this.iniciarDatosTorta(this.nombresTorta, this.deudasTorta);
 
       lista2.forEach(deudor => {
