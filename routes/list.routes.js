@@ -50,9 +50,9 @@ app.get('/list/alldistinct/:id', async (req, res) => {
 app.get('/list/most/:id', async (req, res) => {
     
   let idUrl = req.params.id;   
-  let response = await axios.get(`http://localhost:3000/list/all/${idUrl}`);
+  let response = await axios.get(`https://blacklist-luxsys.herokuapp.com/list/all/${idUrl}`);
 
-  let response2 = await axios.get(`http://localhost:3000/list/alldistinct/${idUrl}`);
+  let response2 = await axios.get(`https://blacklist-luxsys.herokuapp.com/list/alldistinct/${idUrl}`);
   
   let arrayDeudores =response.data;
   let arrayDeIds =  response2.data;
@@ -66,7 +66,7 @@ app.get('/list/most/:id', async (req, res) => {
   });
 
   arrayTotal.forEach(async deudor => {
-    let response = await axios.get(`http://localhost:3000/users/${deudor.id}`);
+    let response = await axios.get(`https://blacklist-luxsys.herokuapp.com/users/${deudor.id}`);
     console.log(response.data);
     let newDeudor = await insertarUsername(deudor, response.data);
     console.log(newDeudor);
@@ -83,7 +83,7 @@ app.get('/list/most/:id', async (req, res) => {
 app.get('/list/mosted/:id', async (req, res) => {
 
     let id = req.params.id;
-    let response = await axios.get(`http://localhost:3000/list/most/${id}`);
+    let response = await axios.get(`https://blacklist-luxsys.herokuapp.com/list/most/${id}`);
     
     let listaDeudores = response.data;
 

@@ -50,7 +50,7 @@ export default {
       ...mapActions(['ocupado', 'handleSnack']),
       async cargarDatos() {
         try {
-        let response = await axios.post('http://localhost:3000/users/group', this.user.usuario);
+        let response = await axios.post('/users/group', this.user.usuario);
         response.data.forEach(deudor => {
           console.log(deudor);
           console.log(deudor.username);
@@ -63,7 +63,7 @@ export default {
       async validate() {
         if (this.$refs.form.validate()) {
           this.ocupado(true);
-          let response = await axios.post('http://localhost:3000/users/username', {username: this.deudor});
+          let response = await axios.post('/users/username', {username: this.deudor});
           console.log(response);
           console.log(this.user);
           try {
@@ -75,7 +75,7 @@ export default {
                 default: this.deuda
               };
               console.log(lista);
-              let response2 = await axios.post('http://localhost:3000/list/new', lista);
+              let response2 = await axios.post('/list/new', lista);
               console.log(response2);
               this.handleSnack({modelSnack: true, colorSnack: "success", textoSnack: "Deudor agregado con exito!"});
           } catch (error) {

@@ -76,7 +76,7 @@ export default {
         if (this.$refs.form.validate()) {
           try {
             this.ocupado(true);
-            let response = await axios.get(`http://localhost:3000/gruopname/${this.grupoElegido}`);
+            let response = await axios.get(`/gruopname/${this.grupoElegido}`);
             
             let nuevoUsuario = {
               username: this.username,
@@ -85,7 +85,7 @@ export default {
               group: response.data.num_group
             }
             
-            let usuarioDB = await axios.post('http://localhost:3000/signUp', nuevoUsuario);
+            let usuarioDB = await axios.post('/signUp', nuevoUsuario);
             this.handleSnack({modelSnack: true, colorSnack: "success", textoSnack: "Has sido registrado!"});
           } catch (error) {
             this.handleSnack({modelSnack: true, colorSnack: "error", textoSnack: "Hubo un error!"});
@@ -101,7 +101,7 @@ export default {
       },
       async cargarDatos() {
         try {
-        let response = await axios.get('http://localhost:3000/groups/gets');
+        let response = await axios.get('/groups/gets');
         console.log(response);
         response.data.forEach(grupoDB => {
           console.log(grupoDB);

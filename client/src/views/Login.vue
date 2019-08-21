@@ -59,7 +59,7 @@ export default {
             
             this.ocupado(true);
 
-            let response = await axios.post('http://localhost:3000/signIn', userSignIn);
+            let response = await axios.post('/signIn', userSignIn);
 
             this.signIn(response.data);
 

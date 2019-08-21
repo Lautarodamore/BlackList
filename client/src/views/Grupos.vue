@@ -48,7 +48,7 @@ export default {
             let nuevoGrupo = {numero: this.numero, name: this.name}
             this.ocupado(true);
 
-            let response = await axios.post('http://localhost:3000/group/new', nuevoGrupo);
+            let response = await axios.post('/group/new', nuevoGrupo);
 
             this.handleSnack({modelSnack: true, colorSnack: "success", textoSnack: "Grupo creado correctamente!"});  
           } catch (error) {

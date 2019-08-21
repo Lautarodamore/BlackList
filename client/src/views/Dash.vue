@@ -69,10 +69,10 @@ export default {
   async beforeMount() {
     try {
       this.ocupado(true);
-      let response = await axios.get(`http://localhost:3000/list/most/${this.user.usuario._id}`);
+      let response = await axios.get(`/list/most/${this.user.usuario._id}`);
       let lista = response.data;
 
-      let response2 = await axios.get(`http://localhost:3000/list/mosted/${this.user.usuario._id}`);
+      let response2 = await axios.get(`/list/mosted/${this.user.usuario._id}`);
       let lista2 = response2.data;
 
       lista.forEach(deudor => {
