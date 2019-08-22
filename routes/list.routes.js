@@ -50,9 +50,9 @@ app.post('/list/alldistinct/:id', async (req, res) => {
 app.post('/list/most/:id', async (req, res) => {
     
   let idUrl = req.params.id;   
-  let response = await axios.post(`https://blacklist-luxsys.herokuapp.com/list/all/${idUrl}`);
+  let response = await axios.post(`/list/all/${idUrl}`);
 
-  let response2 = await axios.post(`https://blacklist-luxsys.herokuapp.com/list/alldistinct/${idUrl}`);
+  let response2 = await axios.post(`/list/alldistinct/${idUrl}`);
   
   let arrayDeudores =response.data;
   let arrayDeIds =  response2.data;
@@ -66,7 +66,7 @@ app.post('/list/most/:id', async (req, res) => {
   });
 
   arrayTotal.forEach(async deudor => {
-    let response = await axios.post(`https://blacklist-luxsys.herokuapp.com/users/${deudor.id}`);
+    let response = await axios.post(`/users/${deudor.id}`);
     console.log(response.data);
     let newDeudor = await insertarUsername(deudor, response.data);
     console.log(newDeudor);
@@ -83,7 +83,7 @@ app.post('/list/most/:id', async (req, res) => {
 app.post('/list/mosted/:id', async (req, res) => {
 
     let id = req.params.id;
-    let response = await axios.post(`https://blacklist-luxsys.herokuapp.com/list/most/${id}`);
+    let response = await axios.post(`/list/most/${id}`);
     
     let listaDeudores = response.data;
 
