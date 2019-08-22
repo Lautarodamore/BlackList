@@ -81,7 +81,7 @@ app.post('/users/username', async (req, res) => {
     
 });
 
-app.get('/users/:id', async (req, res) => {
+app.post('/users/:id', async (req, res) => {
     let id = req.params.id;
 
     let user = await User.findOne({_id: id});
